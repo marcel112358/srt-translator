@@ -45,6 +45,7 @@ def main():
   parser.add_argument('-o', '--output', required=True)
   parser.add_argument('--src-lang', required=True)
   parser.add_argument('--dest-lang', required=True)
+  parser.add_argument('--api-key', required=True)
   args = parser.parse_args()
 
   try:
@@ -60,7 +61,7 @@ def main():
     # Source: https://github.com/agermanidis/autosub 
     src_language = args.src_lang
     dst_language = args.dest_lang
-    google_translate_api_key = 'AIzaSyC9IAUHeLkaswvAA-7Ur9S_rcQ4IusQ5pA'
+    google_translate_api_key = args.api_key
     translator = Translator(dst_language, google_translate_api_key,
                             dst=dst_language,
                             src=src_language)

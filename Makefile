@@ -4,6 +4,7 @@ SRC_LANG=sv
 SRC_FORMAT=vtt
 DEST_LANG=de
 DEST_FORMAT=vtt
+API_KEY=
 
 .PHONY: all
 all: $(subst .$(SRC_LANG).$(SRC_FORMAT),.$(DEST_LANG).$(DEST_FORMAT),$(wildcard $(INPUTPATH)/*.$(SRC_LANG).$(SRC_FORMAT)))
@@ -20,7 +21,7 @@ ifneq ($(SRC_FORMAT), "srt")
 endif
 
 %.$(DEST_LANG).srt: | srt-translator/__init__.py %.$(SRC_LANG).srt
-	python3 $(word 1,$|) -i $(word 2,$|) -o $@ --src-lang $(SRC_LANG) --dest-lang $(DEST_LANG)
+	python3 $(word 1,$|) -i $(word 2,$|) -o $@ --src-lang $(SRC_LANG) --dest-lang $(DEST_LANG) --api-key $(API_KEY)
 
 toUnderscore:
 	rename "s/ /_/g" $(INPUTPATH)/*
