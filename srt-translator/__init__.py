@@ -1,8 +1,10 @@
 import argparse
 from pathlib import Path
 import sys
+import time
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import srt
 
 class Translator(object):
@@ -18,25 +20,28 @@ class Translator(object):
         self.dst = dst
 
     def __call__(self, sentence):
+      for attempt in range(10):
         try:
-            if not sentence:
-                return None
-
-            result = self.service.translations().list(
-                source=self.src,
-                target=self.dst,
-                format='text',
-                q=[sentence]
-            ).execute()
-
-            if 'translations' in result and result['translations'] and \
-                'translatedText' in result['translations'][0]:
-                return result['translations'][0]['translatedText']
-
+          if not sentence:
             return None
 
-        except KeyboardInterrupt:
-            return None
+          result = self.service.translations().list(
+            source=self.src,
+            target=self.dst,
+            format='text',
+            q=[sentence]
+          ).execute()
+
+          if 'translations' in result and result['translations'] and \
+            'translatedText' in result['translations'][0]:
+            return result['translations'][0]['translatedText']
+
+          return None
+
+        except HttpError:
+          print("Retry translation in 5 seconds...")
+          time.sleep(5)
+          continue
 
 
 def main():
