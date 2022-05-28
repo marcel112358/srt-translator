@@ -19,10 +19,10 @@ class Translator(object):
         self.src = src
         self.dst = dst
 
-    def __call__(self, sentence):
+    def __call__(self, sentencesList):
       for attempt in range(10):
         try:
-          if not sentence:
+          if not sentencesList or sentencesList.empty():
             return None
 
           result = self.service.translations().list(
